@@ -97,7 +97,7 @@ const parsingLink = async (link) => {
  */
 const app = (async () => {
   const links = await getLinks();
-  const pop = await parsingArbitrLinks([links[0], links[1]]);
+  const pop = await parsingArbitrLinks(links);
   const datas = await Promise.all(pop);
   return datas;
 });
