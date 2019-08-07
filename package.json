@@ -19,7 +19,6 @@
   "homepage": "https://github.com/tatarFront/arbitrParser#readme",
   "dependencies": {
     "axios": "^0.19.0",
-    "http": "0.0.0",
     "iconv-lite": "^0.5.0",
     "parse5": "^5.1.0",
     "xmldom": "^0.1.27",
