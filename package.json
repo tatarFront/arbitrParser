@@ -1,0 +1,29 @@
+{
+  "name": "arbitrparser",
+  "version": "1.0.0",
+  "description": "parser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tatarFront/arbitrParser.git"
+  },
+  "author": "Salakhutdinova Zulfiia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tatarFront/arbitrParser/issues"
+  },
+  "homepage": "https://github.com/tatarFront/arbitrParser#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "http": "0.0.0",
+    "iconv-lite": "^0.5.0",
+    "parse5": "^5.1.0",
+    "xmldom": "^0.1.27",
+    "xmlserializer": "^0.6.1",
+    "xpath": "0.0.27"
+  }
+}
