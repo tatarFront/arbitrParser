@@ -57,7 +57,7 @@ const getLinks = (async () => {
  * get content from tag
  * @param {object} value - tag after parsing
  */
-const getValue = value => value && value[0] && value[0].textContent
+const getValue = value => value && value[0] && value[0].textContent && value[0].textContent.split(':\n')[1]
 
 /**
  * function for parsing all links
@@ -85,10 +85,9 @@ const parsingLink = async (link) => {
   const email = select(`${baseXPath}/x:table[3]/x:tbody/x:tr/x:td[3]/x:table/x:tbody/x:tr[7]`, doc);
   const site = select(`${baseXPath}/x:table[3]/x:tbody/x:tr/x:td[3]/x:table/x:tbody/x:tr[8]`, doc);
   const mainMan = select(`${baseXPath}/x:table[3]/x:tbody/x:tr/x:td[3]/x:table/x:tbody/x:tr[9]`, doc);
-  
   return {
     id,
-    header: getValue(header),
+    header: header && header[0] && header[0].textContent,
     address: getValue(address),
     timeZone: getValue(timeZone),
     arbitrCode: getValue(arbitrCode),
@@ -112,7 +111,7 @@ const generateJsonFile = async datas => {
       ...item
     }
   })), null, 4);
-  const pathToSave = path.resolve('./', './arbitrationСourt.json');
+  const pathToSave = path.resolve('./', './arbitrationCourt.json');
   await fs.writeFile(pathToSave, finalJson, {}, function(err) {
     if(err) {
       return console.log(err);
