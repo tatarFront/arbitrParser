@@ -1,8 +1,8 @@
 
-#ARBITRPARSER
+# ARBITRPARSER
 The project is intended to collect data on the arbitration courts of the Russian Federation
 
-##Instruction
+## Instruction
 Clone or download project
 > git clone https://github.com/tatarFront/arbitrParser.git
 
@@ -12,7 +12,7 @@ Download modules
 Start project
 ### `npm start`
 
-##Summarize
+## Summarize
 At the output, you have a json file with basic information about the arbitration courts
 
 > ./arbitrationCourt.json
