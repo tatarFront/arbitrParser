@@ -1,7 +1,13 @@
+const fs = require('fs');
+const path = require('path');
+
 //NOTE: for requests
 const axios = require('axios');
-const http = require('http')
 const iconv = require('iconv-lite');
+
+//NOTE: for generate id
+const uuidv1 = require('uuid/v1');
+
 //NOTE: for parse html
 const xpath = require('xpath');
 const parse5 = require('parse5');
@@ -13,13 +19,11 @@ const baseURL = 'http://www.arbitr.ru';
 /**
  * function for request
  * @param {string} url - request url
- * @param {string} method  - request type
  */
-const request = async (url, method) => {
-  const resultBuf = await axios({
-    method,
-    url,
+const request = async (url) => {
+  const resultBuf = await axios.get(url, {
     responseType: 'arraybuffer', 
+    withCredentials: true,
   });
   const result = await iconv.decode(resultBuf.data, 'win1251')
   
@@ -66,9 +70,12 @@ const parsingArbitrLinks = (links) => links.map(link => parsingLink(link))
  * @param {string} link 
  */
 const parsingLink = async (link) => {
+  if(!link) return;
   const raw = await request(link, 'get');
+
   const {select, doc} = parsing(raw);
   const baseXPath = "/x:html/x:body/x:table[2]/x:tbody/x:tr/x:td[3]/x:table/x:tbody/x:tr/x:td/x:table[2]/x:tbody/x:tr/x:td[2]";
+  const id = uuidv1();
   const header = select(`${baseXPath}/x:h1`, doc);
   const address = select(`${baseXPath}/x:table[3]/x:tbody/x:tr/x:td[3]/x:table/x:tbody/x:tr[2]`, doc);
   const timeZone = select(`${baseXPath}/x:table[3]/x:tbody/x:tr/x:td[3]/x:table/x:tbody/x:tr[3]`, doc);
@@ -80,6 +87,7 @@ const parsingLink = async (link) => {
   const mainMan = select(`${baseXPath}/x:table[3]/x:tbody/x:tr/x:td[3]/x:table/x:tbody/x:tr[9]`, doc);
   
   return {
+    id,
     header: getValue(header),
     address: getValue(address),
     timeZone: getValue(timeZone),
@@ -92,13 +100,35 @@ const parsingLink = async (link) => {
   };
 }
 
+
+/**
+ * generate json file with data from arbitr site
+ * @param {array} datas - array of object with description of arbitr court
+ */
+const generateJsonFile = async datas => {
+  const finalJson = JSON.stringify(datas.map(item => ({
+    model: "arbitrationСourt",
+    data: {
+      ...item
+    }
+  })), null, 4);
+  const pathToSave = path.resolve('./', './arbitrationСourt.json');
+  await fs.writeFile(pathToSave, finalJson, {}, function(err) {
+    if(err) {
+      return console.log(err);
+    }
+    console.log('file created');
+  });
+}
+
 /**
  * main function
  */
 const app = (async () => {
   const links = await getLinks();
-  const pop = await parsingArbitrLinks(links);
-  const datas = await Promise.all(pop);
+  const linkPromises = await parsingArbitrLinks(links);
+  const datas = await Promise.all(linkPromises);
+  await generateJsonFile(datas)
   return datas;
 });
 
