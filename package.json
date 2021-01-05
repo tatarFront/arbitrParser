@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/tatarFront/arbitrParser#readme",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "iconv-lite": "^0.5.0",
     "parse5": "^5.1.0",
     "uuid": "^3.3.2",
